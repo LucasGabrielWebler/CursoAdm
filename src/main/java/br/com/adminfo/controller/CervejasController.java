@@ -16,4 +16,8 @@ public class CervejasController {
 		return mv;
 	}
 	
+	public static void main(String [] args) {
+		System.out.println("Teste");
+	}
+	
 }
