@@ -13,12 +13,61 @@
 <section layout:fragment="conteudo">
 	<div class="page-header">
 		<div class="container-fluid">
-			<h1>Cadastro de cerveja</h1>
+			<h1>Cadastro de Cerveja</h1>
 		</div>
 	</div>
 	
 	<div class="container-fluid">
+	
+		<form method="POST">
+			<div class="row">
+				<div class="col-sm-2 form-group">
+					<label for="sku" class="control-label">SKU</label>
+					<input type="text" id="sku" class="form-control">
+				</div>
+				<div class="col-sm-10 form-group">
+					<label for="nome" class="control-label">Nome</label>
+					<input type="text" id="nome" class="form-control">
+				</div>
+			</div>
 			
+			<div class="row">
+				<div class="col-sm-12 form-group">
+					<label for="descricao" class="control-label">Descri&ccedil;&atilde;o</label>
+					<textarea id="descricao" class="form-control" rows="3"></textarea>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-sm-3 form-group">
+					<label for="valor" class="control-label">Valor</label>
+					<div class="input-group">
+						<div class="input-group-addon">R$</div>
+						<input type="text" id="valor" class="form-control js-decimal">
+					</div>
+					
+				</div>
+				
+				<div class="col-sm-3 form-group">
+					<label for="comissao" class="control-label">Comiss&atilde;o</label>
+					<div class="input-group">
+						<div class="input-group-addon">R$</div>
+						<input type="text" id="comissao" class="form-control js-decimal">
+					</div>					
+				</div>
+				
+				<div class="col-sm-3 form-group">
+					<label for="estoque" class="control-label">Estoque</label>
+					<input type="text" id="estoque" class="form-control js-plain">				
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class= "col-sm-12">
+					<button class="btn btn-primary">Salvar</button>
+				</div>
+			</div>
+		</form>			
 	</div>
 </section>
 
