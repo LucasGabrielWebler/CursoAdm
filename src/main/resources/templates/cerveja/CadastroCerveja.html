@@ -18,20 +18,23 @@
 	</div>
 	
 	<div class="container-fluid">
-		<form method="POST" th:object="${cerveja}">
+		<form method="POST" th:object="${cerveja}" th:action="@{/cervejas/nova}">
+		
+			<brewer:message/>
+		
 			<div class="row">
-				<div class="col-sm-2 form-group">
+				<div class="col-sm-2 form-group bw-required" brewer:classforerror="sku">
 					<label for="sku" class="control-label">SKU</label>
 					<input type="text" id="sku" class="form-control" th:field="*{sku}">
 				</div>
-				<div class="col-sm-10 form-group">
+				<div class="col-sm-10 form-group bw-required" brewer:classforerror="nome">
 					<label for="nome" class="control-label">Nome</label>
 					<input type="text" id="nome" class="form-control" th:field="*{nome}">
 				</div>
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-12 form-group">
+				<div class="col-sm-12 form-group bw-required" brewer:classforerror="descricao">
 					<label for="descricao" class="control-label">Descri&ccedil;&atilde;o</label>
 					<textarea id="descricao" class="form-control" rows="3" th:field="*{descricao}"></textarea>
 				</div>
@@ -53,22 +56,22 @@
 					</select>
 				</div>
 				<div class="col-sm-3 form-group">
-					<label for="teorAlcoolico" class="control-label">Teor alcoolico</label>
+					<label for="teorAlcoolico" class="control-label">Teor Alcoolico</label>
 					<div class="input-group">
 						<div class="input-group-addon">%</div>
 						<input type="text" id="teorAlcoolico" class="form-control js-decimal" th:field="*{teorAlcoolico}">
 					</div>
-				</div>
+				</div>	
 				<div class="col-sm-3 form-group">
 					<label for="origem" class="control-label">Origem</label>
 					<select id="origem" class="form-control" th:field="*{origem}">
 						<option th:each="origem : ${origens}" th:value="${origem}" th:text="${origem.descricao}"></option>
 					</select>
-				</div>				
+				</div>
 			</div>
 			
 			<div class="row">
-				<div class="col-sm-3 form-group">
+				<div class="col-sm-3 form-group bw-required" brewer:classforerror="valor">
 					<label for="valor" class="control-label">Valor</label>
 					<div class="input-group">
 						<div class="input-group-addon">R$</div>
@@ -82,9 +85,12 @@
 						<input type="text" id="comissao" class="form-control js-decimal" th:field="*{comissao}">
 					</div>					
 				</div>
-				<div class="col-sm-3 form-group">
+				<div class="col-sm-3 form-group bw-required" brewer:classforerror="quantidadeEstoque">
 					<label for="estoque" class="control-label">Estoque</label>
-					<input type="text" id="estoque" class="form-control js-plain" th:field="*{quantidadeEstoque}">				
+					<div class="input-group">
+						<div class="input-group-addon">UN</div>
+						<input type="text" id="estoque" class="form-control js-plain" th:field="*{quantidadeEstoque}">					
+					</div>
 				</div>
 			</div>
 			
