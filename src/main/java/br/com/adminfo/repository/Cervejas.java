@@ -6,6 +6,5 @@ import br.com.adminfo.model.Cerveja;
 import br.com.adminfo.repository.helper.cerveja.CervejasQueries;
 
 public interface Cervejas extends JpaRepository<Cerveja, Long>, CervejasQueries{
-
 	
 }

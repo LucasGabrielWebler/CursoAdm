@@ -5,13 +5,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.adminfo.model.Cliente;
-import br.com.adminfo.repository.ClientesRepository;
+import br.com.adminfo.repository.Clientes;
 
 @Service
 public class ClienteService {
 	
 	@Autowired
-	private ClientesRepository clientes;
+	private Clientes clientes;
 
 	@Transactional
 	public void salvar(Cliente cliente) {

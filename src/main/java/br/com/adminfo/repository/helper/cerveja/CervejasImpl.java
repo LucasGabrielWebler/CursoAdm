@@ -1,5 +1,7 @@
 package br.com.adminfo.repository.helper.cerveja;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
+import br.com.adminfo.dto.CervejaDTO;
 import br.com.adminfo.model.Cerveja;
 import br.com.adminfo.repository.filter.CervejaFilter;
 import br.com.adminfo.repository.paginacao.PaginacaoUtil;
@@ -84,4 +87,14 @@ public class CervejasImpl implements CervejasQueries {
 		return filtro.getEstilo() != null && filtro.getEstilo().getCodigo() != null;
 	}
 
+	@Override
+	public List<CervejaDTO> porSkuOuNome(String skuOuNome) {
+		String jpql = "select new br.com.adminfo.dto.CervejaDTO(codigo, sku, nome, origem, valor) "
+				+ "from Cerveja where lower(sku) like lower(:skuOuNome) or lower(nome) like lower(:skuOuNome)";
+		List<CervejaDTO> cervejasFiltradas = manager.createQuery(jpql, CervejaDTO.class)
+					.setParameter("skuOuNome", skuOuNome + "%")
+					.getResultList();
+		return cervejasFiltradas;
+	}
+	
 }
