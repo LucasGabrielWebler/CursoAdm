@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +28,7 @@ import br.com.adminfo.repository.Clientes;
 import br.com.adminfo.repository.Estados;
 import br.com.adminfo.repository.filter.ClienteFilter;
 import br.com.adminfo.service.ClienteService;
+import br.com.adminfo.service.exception.ImpossivelExcluirEntidadeException;
 
 @Controller
 @RequestMapping("/clientes")
@@ -55,7 +59,7 @@ public class ClientesController {
 		clienteService.salvar(cliente);
 		
 		attributes.addFlashAttribute("mensagem", "Cliente salvo com sucesso");
-		return new ModelAndView("redirect:/clientes/novo");
+		return new ModelAndView("redirect:/clientes");
 	}
 	
 	@GetMapping
@@ -71,5 +75,24 @@ public class ClientesController {
 	@RequestMapping(consumes = { MediaType.APPLICATION_JSON_VALUE } )
 	public @ResponseBody List<Cliente> pesquisar(String nome){
 		return clientes.findByNomeStartingWithIgnoreCase(nome);
+	}
+	
+	@GetMapping("/{codigo}")
+	public ModelAndView editar(@PathVariable Long codigo) {
+		Cliente cliente = clientes.findOne(codigo);
+		ModelAndView mv = novo(cliente);
+		mv.addObject(cliente);
+		return mv;
+	}
+	
+	@DeleteMapping("/{codigo}")
+	public @ResponseBody ResponseEntity<?> excluir(@PathVariable("codigo") Cliente cliente){
+		try {
+			clienteService.excluir(cliente);
+		}catch(ImpossivelExcluirEntidadeException e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 }

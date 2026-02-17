@@ -71,7 +71,11 @@ public class ItemVenda {
 	public void setVenda(Venda venda) {
 		this.venda = venda;
 	}
-
+	
+	public BigDecimal getValorTotal() {
+		return valorUnitario.multiply(new BigDecimal(quantidade));
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

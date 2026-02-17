@@ -37,12 +37,14 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import com.github.mxab.thymeleaf.extras.dataattribute.dialect.DataAttributeDialect;
 
 import br.com.adminfo.controller.CervejasController;
+import br.com.adminfo.controller.converter.ClienteConverter;
 import br.com.adminfo.controller.converter.GrupoConverter;
+import br.com.adminfo.session.TabelaItensSession;
 import br.com.adminfo.thymeleaf.BrewerDialect;
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
 @Configuration
-@ComponentScan(basePackageClasses = { CervejasController.class })
+@ComponentScan(basePackageClasses = { CervejasController.class, TabelaItensSession.class })
 @EnableWebMvc
 @EnableSpringDataWebSupport
 public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
@@ -105,6 +107,7 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	public FormattingConversionService mvcConversionService() {
 		DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService();
 		conversionService.addConverter(new GrupoConverter());
+		conversionService.addConverter(new ClienteConverter());
 		
 		NumberStyleFormatter bigDecimalFormatter = new NumberStyleFormatter("#,##0.00");
 		conversionService.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);

@@ -8,6 +8,10 @@
 
 <head>
 	<title>Cadastro de venda</title>	
+	
+	<link rel="stylesheet" th:href="@{/stylesheets/vendors/easy-autocomplete.min.css}"/>
+	<link rel="stylesheet" th:href="@{/stylesheets/vendors/easy-autocomplete.themes.min.css}"/>
+	
 </head>
 <body>
 
@@ -30,9 +34,48 @@
 	</div>
 	
 	<div class="container-fluid">
-		<form method="POST" th:object="${venda}" th:action="@{/vendas/nova}">
+		<form method="POST" th:object="${venda}" th:action="@{/vendas/nova}" class = "js-formulario-principal">
 		
 			<brewer:message/>
+			
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="aw-box  js-valor-total-box-container">
+						<div class="aw-box__icon">
+							<i class="fa  fa-usd  fa-3x"></i>
+						</div>
+						<div class="aw-box__value">R$<span class="js-valor-total-box" th:text="${{venda.valorTotal}}">0,00</span></div>
+						<div class="aw-box__title">Total</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-4">
+					<div class="aw-box">
+						<div class="aw-box__icon">
+							<i class="fa  fa-tag  fa-3x"></i>
+						</div>
+						<div class="aw-box__value" th:text="${venda.status.descricao}">Orçamento</div>
+						<div class="aw-box__title">Status</div>
+					</div>
+				</div>
+				
+				<div class="col-sm-4">
+					<div class="aw-box">
+						<div class="aw-box__icon">
+							<i class="fa  fa-calendar  fa-3x"></i>
+						</div>
+						<div class="aw-box__value">
+							<span class="js-tooltip" th:if="${venda.diasCriacao == 0}">Hoje</span>
+							<span class="js-tooltip" th:if="${venda.diasCriacao == 1}">Há 1 dia</span>
+							<span class="js-tooltip" th:if="${venda.diasCriacao > 1}">Há [[${venda.diasCriacao}]] dias</span>
+						</div>
+						<div class="aw-box__title">Criação</div>
+					</div>
+				</div>
+			</div>
+			
+			<input type="hidden" th:field="*{codigo}"/>
+			<input type="hidden" id="uuid" th:field="*{uuid}"/>
 			
 			<div class="row">
 				<div class="form-group  col-sm-4  bw-required" brewer:classforerror="cliente.codigo">
@@ -119,6 +162,24 @@
 				</div>
 			</div>
 			
+			<div class="row" style="clear: both" th:if="${venda.salvarPermitido}">
+				<div class="col-lg-12">
+					<div class="btn-group">
+					  <button type="submit" class="btn  btn-primary  js-submit-btn" data:acao="salvar">Salvar</button>
+					  <button type="button" class="btn  btn-primary  dropdown-toggle" data-toggle="dropdown">
+					    <span class="caret"></span>
+					  </button>
+					  
+					  <ul class="dropdown-menu">
+					    <li><a href="#" class="js-submit-btn" data:acao="emitir">Salvar e emitir</a></li>
+					    <li><a href="#" class="js-submit-btn" data:acao="enviarEmail">Salvar e enviar por e-mail</a></li>
+					  </ul>
+					</div>
+				
+					<button class="btn btn-danger js-submit-btn" data:acao="cancelar" th:unless="${venda.nova}">Cancelar</button>
+				</div>
+			</div>
+			
 		</form>			
 	</div>
 	
@@ -134,6 +195,7 @@
 	<script th:src="@{/javascripts/venda.autocomplete-itens.js}"></script>
 	<script th:src="@{/javascripts/venda.tabela-itens.js}"></script>
 	<script th:src="@{/javascripts/venda.js}"></script>
+	<script th:src="@{/javascripts/venda.botoes-submit.js}"></script>
 	
 	<script>
 	$(function() {

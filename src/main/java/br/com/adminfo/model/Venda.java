@@ -4,8 +4,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -56,6 +58,9 @@ public class Venda {
 	
 	@Enumerated(EnumType.STRING)
 	private StatusVenda status = StatusVenda.ORCAMENTO;
+	
+	@Transient
+	private String uuid;
 	
 	@Transient
 	private LocalDate dataEntrega;
@@ -146,6 +151,14 @@ public class Venda {
 		this.status = status;
 	}
 
+	public String getUuid() {
+		return uuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+
 	public LocalDate getDataEntrega() {
 		return dataEntrega;
 	}
@@ -170,12 +183,43 @@ public class Venda {
 		this.itens = itens;
 	}
 
-	public boolean isSalvarProibido() {
-		if(status == StatusVenda.CANCELADA) {
-			return true;
-		}
+	public boolean isNova() {
+		return codigo == null;
+	}
 	
-		return false;
+	public boolean isSalvarProibido() {
+		return !isSalvarPermitido();
+	}
+	
+	public boolean isSalvarPermitido() {
+		return !status.equals(StatusVenda.CANCELADA);
+	}
+	
+	public Long getDiasCriacao() {
+		LocalDate inicio = dataCriacao != null ? dataCriacao.toLocalDate() : LocalDate.now();
+		return ChronoUnit.DAYS.between(inicio, LocalDate.now());
+	}
+	
+	public void calcularValorTotal() {
+		BigDecimal valorTotalItens = getItens().stream()
+				.map(ItemVenda::getValorTotal)
+				.reduce(BigDecimal::add)
+				.orElse(BigDecimal.ZERO);
+		
+		this.valorTotal = calcularValorTotal(valorTotalItens, getValorFrete(), getValorDesconto());
+	}
+	
+	private BigDecimal calcularValorTotal(BigDecimal valorTotalItens, BigDecimal valorFrete, BigDecimal valorDesconto) {
+		BigDecimal valorTotal = valorTotalItens
+				.add(Optional.ofNullable(valorFrete).orElse(BigDecimal.ZERO))
+				.subtract(Optional.ofNullable(valorDesconto).orElse(BigDecimal.ZERO));
+		return valorTotal;
+	}
+
+	public void adicionarItens(List<ItemVenda> itens) {
+		this.itens = itens;
+		this.itens.forEach(i -> i.setVenda(this));
+		
 	}
 	
 	@Override
@@ -202,5 +246,5 @@ public class Venda {
 			return false;
 		return true;
 	}
-	
+
 }

@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import br.com.adminfo.dto.CervejaDTO;
+import br.com.adminfo.dto.ValorItensEstoque;
 import br.com.adminfo.model.Cerveja;
 import br.com.adminfo.repository.filter.CervejaFilter;
 import br.com.adminfo.repository.paginacao.PaginacaoUtil;
@@ -97,4 +98,10 @@ public class CervejasImpl implements CervejasQueries {
 		return cervejasFiltradas;
 	}
 	
+	@Override
+	public ValorItensEstoque valorItensEstoque() {
+		String query = "select new br.com.adminfo.dto.ValorItensEstoque(sum(valor * quantidadeEstoque), sum(quantidadeEstoque)) from Cerveja";
+		return manager.createQuery(query, ValorItensEstoque.class).getSingleResult();
+	}
 }
+
